@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build_release:
+    name: Build Release
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            ext: .exe
+            asset_name: SerialAssistant-Windows-x64
+          - os: ubuntu-latest
+            rid: linux-x64
+            ext: ""
+            asset_name: SerialAssistant-Linux-x64
+          - os: macos-latest
+            rid: osx-x64
+            ext: ""
+            asset_name: SerialAssistant-macOS-x64
+          - os: macos-latest
+            rid: osx-arm64
+            ext: ""
+            asset_name: SerialAssistant-macOS-arm64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Publish
+      run: dotnet publish SerialAssistant.csproj -c Release -r ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:PublishReadyToRun=true -o ./publish
+
+    - name: Create Archive (Zip)
+      if: matrix.os == 'windows-latest'
+      run: Compress-Archive -Path ".\publish\*" -DestinationPath ".\${{ matrix.asset_name }}.zip"
+
+    - name: Create Archive (Tar.gz)
+      if: matrix.os != 'windows-latest'
+      run: tar -czvf ${{ matrix.asset_name }}.tar.gz -C publish .
+
+    - name: Upload Release Asset (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{ matrix.asset_name }}.zip
+        
+    - name: Upload Release Asset (Unix)
+      if: matrix.os != 'windows-latest'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{ matrix.asset_name }}.tar.gz

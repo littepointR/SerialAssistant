@@ -1,0 +1,333 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialAssistant.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:material="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+        x:Class="SerialAssistant.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="{DynamicResource AppTitle}"
+        Width="1200" Height="800"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto, *, Auto">
+        
+        <!-- App Bar / Header -->
+        <material:ColorZone Grid.Row="0" Mode="PrimaryMid" Padding="8">
+            <Grid ColumnDefinitions="Auto, *, Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <avalonia:MaterialIcon Kind="SerialPort" Width="20" Height="20" />
+                    <TextBlock Text="{DynamicResource AppTitle}" FontSize="16" FontWeight="Medium" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Button Grid.Column="2" Classes="Flat" ToolTip.Tip="{DynamicResource Settings}">
+                    <Button.Flyout>
+                        <Flyout>
+                            <material:ColorZone Mode="Standard" Padding="16" Margin="-12">
+                                <StackPanel Spacing="8" Width="280">
+                                    <TextBlock Text="{DynamicResource Settings}" FontWeight="Bold" FontSize="16" Margin="0,0,0,8"/>
+                                    
+                                    <Grid ColumnDefinitions="*, Auto" Margin="0,4">
+                                        <TextBlock Text="{DynamicResource Language}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="1" ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}" Width="140" Padding="4,2"/>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*, Auto" Margin="0,4">
+                                        <TextBlock Text="{DynamicResource Theme}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="1" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" Width="140" Padding="4,2"/>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*, Auto" Margin="0,4">
+                                        <TextBlock Text="{DynamicResource ThemeColor}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="1" ItemsSource="{Binding ThemeColors}" SelectedItem="{Binding SelectedThemeColor}" Width="140" Padding="4,2"/>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*, Auto" Margin="0,4">
+                                        <TextBlock Text="{DynamicResource Encoding}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="1" ItemsSource="{Binding Encodings}" SelectedItem="{Binding SelectedEncoding}" Width="140" Padding="4,2"/>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*, Auto" Margin="0,4">
+                                        <TextBlock Text="{DynamicResource RxBufferSize}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="1" ItemsSource="{Binding BufferSizes}" SelectedItem="{Binding SelectedBufferSize}" Width="140" Padding="4,2"/>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*, Auto" Margin="0,4">
+                                        <TextBlock Text="{DynamicResource FontSize}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="1" ItemsSource="{Binding FontSizes}" SelectedItem="{Binding SelectedFontSize}" Width="140" Padding="4,2"/>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*, Auto" Margin="0,4">
+                                        <TextBlock Text="{DynamicResource LineEnding}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="1" ItemsSource="{Binding LineEndings}" SelectedItem="{Binding SelectedLineEnding}" Width="140" Padding="4,2"/>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*, Auto" Margin="0,4">
+                                        <TextBlock Text="{DynamicResource ShowLineNum}" VerticalAlignment="Center"/>
+                                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding ShowLineNumbers}" MinHeight="24"/>
+                                    </Grid>
+                                </StackPanel>
+                            </material:ColorZone>
+                        </Flyout>
+                    </Button.Flyout>
+                    <avalonia:MaterialIcon Kind="Cog" Width="24" Height="24"/>
+                </Button>
+            </Grid>
+        </material:ColorZone>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" ColumnDefinitions="280, Auto, *, Auto, 320" Margin="8">
+            
+            <!-- Left Panel (Settings) -->
+            <material:Card Grid.Column="0" Margin="0,0,0,0" Padding="8" VerticalAlignment="Stretch">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="{DynamicResource Connection}" FontWeight="Bold" />
+                        
+                        <Grid ColumnDefinitions="*, Auto" Margin="0">
+                            <ComboBox Grid.Column="0" Classes="Outline" Theme="{StaticResource OutlineComboBox}" HorizontalAlignment="Stretch" 
+                                      ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" 
+                                      IsEnabled="{Binding !IsConnected}" PlaceholderText="{DynamicResource PortName}" MinHeight="32" Padding="8,4" />
+                            <Button Grid.Column="1" Classes="Flat" Command="{Binding RefreshPortsCommand}" IsEnabled="{Binding !IsConnected}" Margin="4,0,0,0" Padding="4">
+                                <avalonia:MaterialIcon Kind="Refresh" Width="18" Height="18" />
+                            </Button>
+                        </Grid>
+
+                        <ComboBox Classes="Outline" Theme="{StaticResource OutlineComboBox}" HorizontalAlignment="Stretch" 
+                                  ItemsSource="{Binding BaudRates}" SelectedItem="{Binding SelectedBaudRate}" 
+                                  IsEnabled="{Binding !IsConnected}" PlaceholderText="{DynamicResource BaudRate}" MinHeight="32" Padding="8,4" />
+
+                        <Grid ColumnDefinitions="*, *" Margin="0">
+                            <ComboBox Grid.Column="0" Classes="Outline" Theme="{StaticResource OutlineComboBox}" HorizontalAlignment="Stretch" 
+                                      ItemsSource="{Binding DataBitsList}" SelectedItem="{Binding SelectedDataBits}" 
+                                      IsEnabled="{Binding !IsConnected}" PlaceholderText="{DynamicResource DataBits}" MinHeight="32" Padding="8,4" Margin="0,0,4,0"/>
+
+                            <ComboBox Grid.Column="1" Classes="Outline" Theme="{StaticResource OutlineComboBox}" HorizontalAlignment="Stretch" 
+                                      ItemsSource="{Binding StopBitsList}" SelectedItem="{Binding SelectedStopBits}" 
+                                      IsEnabled="{Binding !IsConnected}" PlaceholderText="{DynamicResource StopBits}" MinHeight="32" Padding="8,4" Margin="4,0,0,0"/>
+                        </Grid>
+
+                        <ComboBox Classes="Outline" Theme="{StaticResource OutlineComboBox}" HorizontalAlignment="Stretch" 
+                                  ItemsSource="{Binding ParityList}" SelectedItem="{Binding SelectedParity}" 
+                                  IsEnabled="{Binding !IsConnected}" PlaceholderText="{DynamicResource Parity}" MinHeight="32" Padding="8,4" />
+
+                        <Button Classes="Dark" Command="{Binding ConnectCommand}" Content="{Binding ConnectButtonText}" 
+                                HorizontalAlignment="Stretch" MinHeight="32" Margin="0,4,0,0" 
+                                Background="{Binding IsConnected, Converter={x:Static ObjectConverters.IsNull}}"/> 
+
+                        <Separator Margin="0,4"/>
+
+                        <TextBlock Text="{DynamicResource Display}" FontWeight="Bold" />
+                        <WrapPanel Orientation="Horizontal" Margin="0">
+                            <CheckBox Content="{DynamicResource Timestamp}" IsChecked="{Binding ShowTimestamp}" Margin="0,0,8,0" FontSize="12" MinHeight="24" />
+                            <CheckBox Content="{DynamicResource PauseUpdate}" IsChecked="{Binding PauseUpdate}" Margin="0,0,8,0" FontSize="12" MinHeight="24" />
+                            <CheckBox Content="{DynamicResource AutoScroll}" IsChecked="{Binding AutoScroll}" Margin="0,0,8,0" FontSize="12" MinHeight="24" />
+                        </WrapPanel>
+                        
+                        <CheckBox Content="{DynamicResource AutoFrameBreak}" IsChecked="{Binding AutoFrameBreak}" FontSize="12" MinHeight="24" />
+                        <StackPanel Orientation="Horizontal" IsEnabled="{Binding AutoFrameBreak}" Spacing="4" Margin="24,0,0,0">
+                            <TextBlock Text="{DynamicResource Timeout}" VerticalAlignment="Center" FontSize="12"/>
+                            <NumericUpDown Value="{Binding FrameBreakTimeoutMs}" Minimum="10" Maximum="5000" Width="90" MinHeight="24" Padding="4,2" />
+                            <TextBlock Text="ms" VerticalAlignment="Center" FontSize="12"/>
+                        </StackPanel>
+
+                        <Separator Margin="0,4"/>
+
+                        <Button Classes="Outline" Command="{Binding OpenPlotterCommand}" HorizontalAlignment="Stretch" MinHeight="32">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <avalonia:MaterialIcon Kind="ChartLine" Width="16" Height="16"/>
+                                <TextBlock Text="{DynamicResource OpenPlotter}" VerticalAlignment="Center" FontSize="12"/>
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </material:Card>
+
+            <!-- Splitter 1 -->
+            <GridSplitter Grid.Column="1" Background="Transparent" Width="8" ResizeDirection="Columns" />
+
+            <!-- Center Panel (Terminal) -->
+            <Grid Grid.Column="2" RowDefinitions="*, Auto, 120" Margin="0">
+                
+                <!-- Received Data -->
+                <material:Card Grid.Row="0" Margin="0,0,0,8" Padding="8">
+                    <Grid RowDefinitions="Auto, *">
+                        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto, Auto" Margin="0,0,0,4">
+                            <TextBlock Grid.Column="0" Text="{DynamicResource ReceivedData}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <ToggleSwitch Grid.Column="2" Content="HEX" IsChecked="{Binding IsHexReceive}" Margin="0,0,8,0" VerticalAlignment="Center" FontSize="12" MinHeight="24"/>
+                            <Button Grid.Column="3" Classes="Flat" Command="{Binding ClearCommand}" ToolTip.Tip="{DynamicResource Clear}" Padding="4" MinHeight="24" MinWidth="24">
+                                <avalonia:MaterialIcon Kind="DeleteSweep" Width="18" Height="18" />
+                            </Button>
+                        </Grid>
+                        <TextBox Name="RxTextBox" Grid.Row="1" Classes="Outline" Theme="{StaticResource OutlineTextBox}"
+                                 Text="{Binding ReceivedData}" AcceptsReturn="True" IsReadOnly="True" 
+                                 TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" FontFamily="Consolas, Courier New, monospace" FontSize="{Binding SelectedFontSize}" Padding="4"/>
+                    </Grid>
+                </material:Card>
+
+                <!-- Send Data -->
+                <material:Card Grid.Row="1" Margin="0,0,0,8" Padding="8">
+                    <Grid RowDefinitions="Auto, Auto">
+                        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto, Auto" Margin="0,0,0,4">
+                            <TextBlock Grid.Column="0" Text="{DynamicResource SendData}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="2" Classes="Outline" Theme="{StaticResource OutlineComboBox}" 
+                                      ItemsSource="{Binding SendHistory}" SelectedItem="{Binding SelectedSendHistory}" Width="120" Margin="0,0,8,0" PlaceholderText="{DynamicResource History}" MinHeight="24" Padding="4,2" FontSize="12"/>
+                            <ToggleSwitch Grid.Column="3" Content="HEX" IsChecked="{Binding IsHexSend}" VerticalAlignment="Center" FontSize="12" MinHeight="24"/>
+                        </Grid>
+                        <Grid Grid.Row="1" ColumnDefinitions="*, Auto">
+                            <TextBox Name="TxTextBox" Grid.Column="0" Classes="Outline" Theme="{StaticResource OutlineTextBox}"
+                                     Text="{Binding DataToSend}" AcceptsReturn="True" 
+                                     TextWrapping="Wrap" Height="70" ScrollViewer.VerticalScrollBarVisibility="Auto" FontFamily="Consolas, Courier New, monospace" FontSize="{Binding SelectedFontSize}" Padding="4"/>
+                            <Button Grid.Column="1" Classes="Dark" Command="{Binding SendCommand}" Margin="8,0,0,0" Width="60">
+                                <StackPanel Spacing="2">
+                                    <avalonia:MaterialIcon Kind="Send" Width="20" Height="20" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource Send}" HorizontalAlignment="Center" FontSize="10"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </material:Card>
+
+                <!-- Logs -->
+                <material:Card Grid.Row="2" Padding="8">
+                    <Grid RowDefinitions="Auto, *">
+                        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,4">
+                            <TextBlock Grid.Column="0" Text="{DynamicResource SystemLogs}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                            <Button Grid.Column="1" Classes="Flat" Command="{Binding ClearLogCommand}" ToolTip.Tip="{DynamicResource ClearLogs}" Padding="4" MinHeight="24" MinWidth="24">
+                                <avalonia:MaterialIcon Kind="DeleteSweep" Width="16" Height="16"/>
+                            </Button>
+                        </Grid>
+                        <TextBox Grid.Row="1" Classes="Outline" Theme="{StaticResource OutlineTextBox}"
+                                 Text="{Binding LogData}" AcceptsReturn="True" IsReadOnly="True" 
+                                 TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" FontSize="11" Foreground="Gray" Padding="4"/>
+                    </Grid>
+                </material:Card>
+
+            </Grid>
+
+            <!-- Splitter 2 -->
+            <GridSplitter Grid.Column="3" Background="Transparent" Width="8" ResizeDirection="Columns" />
+
+            <!-- Right Panel (Quick Sends & Scripts) -->
+            <Grid Grid.Column="4" RowDefinitions="*, *">
+                
+                <!-- Quick Sends -->
+                <material:Card Grid.Row="0" Margin="0,0,0,4" Padding="8">
+                    <Grid RowDefinitions="Auto, *">
+                        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,4">
+                            <TextBlock Grid.Column="0" Text="{DynamicResource QuickSends}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Button Grid.Column="1" Classes="Flat" Command="{Binding AddQuickSendCommand}" ToolTip.Tip="{DynamicResource Add}" Padding="4" MinHeight="24" MinWidth="24">
+                                <avalonia:MaterialIcon Kind="Add" Width="18" Height="18" />
+                            </Button>
+                        </Grid>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding QuickSends}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Margin="0,0,0,4" Padding="4">
+                                            <Grid ColumnDefinitions="Auto, *, Auto, Auto" RowDefinitions="Auto, Auto">
+                                                <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Name}" Classes="Clear" Margin="0,0,0,2" FontWeight="Medium" FontSize="12" MinHeight="24" Padding="2"/>
+                                                <ToggleSwitch Grid.Row="0" Grid.Column="2" Content="HEX" IsChecked="{Binding IsHex}" Margin="4,0" VerticalAlignment="Center" FontSize="10" MinHeight="20"/>
+                                                <Button Grid.Row="0" Grid.Column="3" Classes="Flat" Command="{Binding RemoveCommand}" Foreground="Red" ToolTip.Tip="Remove" Padding="2" MinHeight="20" MinWidth="20">
+                                                    <avalonia:MaterialIcon Kind="Close" Width="14" Height="14"/>
+                                                </Button>
+
+                                                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Data}" Classes="Outline" Theme="{StaticResource OutlineTextBox}" Margin="0,0,4,0" FontSize="12" MinHeight="24" Padding="4,2"/>
+                                                <Button Grid.Row="1" Grid.Column="3" Classes="Light" Command="{Binding SendCommand}" ToolTip.Tip="Send" Padding="2" MinHeight="24" MinWidth="24">
+                                                    <avalonia:MaterialIcon Kind="Send" Width="16" Height="16"/>
+                                                </Button>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </material:Card>
+
+                <!-- JS Scripts -->
+                <material:Card Grid.Row="1" Margin="0,4,0,0" Padding="8">
+                    <Grid RowDefinitions="Auto, *">
+                        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,4">
+                            <TextBlock Grid.Column="0" Text="{DynamicResource JSScripts}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Button Grid.Column="1" Classes="Flat" Command="{Binding AddScriptCommand}" ToolTip.Tip="{DynamicResource AddScript}" Padding="4" MinHeight="24" MinWidth="24">
+                                <avalonia:MaterialIcon Kind="Add" Width="18" Height="18" />
+                            </Button>
+                        </Grid>
+
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding JsScripts}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Margin="0,0,0,4" Padding="4">
+                                            <Grid RowDefinitions="Auto, Auto, *">
+                                                <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto">
+                                                    <ToggleSwitch Grid.Column="0" IsChecked="{Binding IsEnabled}" Content="" Margin="0,0,4,0" VerticalAlignment="Center" MinHeight="20"/>
+                                                    <TextBox Grid.Column="1" Text="{Binding Name}" Classes="Clear" VerticalAlignment="Center" FontWeight="Medium" FontSize="12" MinHeight="24" Padding="2"/>
+                                                    <Button Grid.Column="2" Classes="Flat" Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).RemoveScriptCommand}" CommandParameter="{Binding}" Foreground="Red" ToolTip.Tip="Remove" Padding="2" MinHeight="20" MinWidth="20">
+                                                        <avalonia:MaterialIcon Kind="Close" Width="14" Height="14"/>
+                                                    </Button>
+                                                </Grid>
+                                                
+                                                <Grid Grid.Row="1" ColumnDefinitions="Auto, Auto, *" Margin="0,2">
+                                                    <ToggleSwitch Grid.Column="0" IsChecked="{Binding IsTimerEnabled}" Content="Timer" Margin="0,0,4,0" IsEnabled="{Binding IsEnabled}" FontSize="10" MinHeight="20"/>
+                                                    <NumericUpDown Grid.Column="1" Value="{Binding TimerIntervalMs}" Minimum="10" Maximum="60000" Width="80" IsVisible="{Binding TimerSettingsVisible}" IsEnabled="{Binding IsEnabled}" FontSize="12" MinHeight="24" Padding="4,2"/>
+                                                    <TextBlock Grid.Column="2" Text="ms" VerticalAlignment="Center" Margin="4,0,0,0" IsVisible="{Binding TimerSettingsVisible}" Foreground="Gray" FontSize="10"/>
+                                                </Grid>
+
+                                                <TextBox Grid.Row="2" Classes="Outline" Theme="{StaticResource OutlineTextBox}" Text="{Binding ScriptContent}" AcceptsReturn="True" AcceptsTab="True" 
+                                                         FontFamily="Consolas, Courier New, monospace" Height="100" ScrollViewer.VerticalScrollBarVisibility="Auto" IsEnabled="{Binding IsEnabled}" FontSize="11" Padding="4"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </material:Card>
+
+            </Grid>
+        </Grid>
+
+        <!-- Status Bar -->
+        <material:ColorZone Grid.Row="2" Mode="Standard" Padding="8,2" ZIndex="-1" Background="#F5F5F5">
+            <Grid ColumnDefinitions="Auto, Auto, *, Auto, Auto, Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,16,0">
+                    <TextBlock Text="Rx: " FontWeight="Medium" FontSize="12"/>
+                    <TextBlock Text="{Binding RxCount}" FontSize="12" />
+                    <TextBlock Text=" Bytes" Foreground="Gray" FontSize="10" VerticalAlignment="Bottom" Margin="2,0,0,1"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock Text="Tx: " FontWeight="Medium" FontSize="12"/>
+                    <TextBlock Text="{Binding TxCount}" FontSize="12" />
+                    <TextBlock Text=" Bytes" Foreground="Gray" FontSize="10" VerticalAlignment="Bottom" Margin="2,0,0,1"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="0,0,16,0">
+                    <TextBlock Text="Rx Sel: " Foreground="Teal" FontSize="12"/>
+                    <TextBlock Text="{Binding RxSelectionLength}" Foreground="Teal" FontSize="12"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4" Orientation="Horizontal" Margin="0,0,16,0">
+                    <TextBlock Text="Tx Sel: " Foreground="Teal" FontSize="12"/>
+                    <TextBlock Text="{Binding TxSelectionLength}" Foreground="Teal" FontSize="12"/>
+                </StackPanel>
+                
+                <Button Grid.Column="5" Classes="Flat" Command="{Binding ClearCountersCommand}" Padding="4,0" MinHeight="0">
+                    <TextBlock Text="{DynamicResource ResetCounters}" FontSize="11"/>
+                </Button>
+            </Grid>
+        </material:ColorZone>
+
+    </Grid>
+
+</Window>

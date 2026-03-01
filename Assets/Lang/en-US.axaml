@@ -1,0 +1,40 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="AppTitle">Serial Port Assistant</system:String>
+    <system:String x:Key="Connection">Connection</system:String>
+    <system:String x:Key="PortName">Port Name:</system:String>
+    <system:String x:Key="BaudRate">Baud Rate:</system:String>
+    <system:String x:Key="DataBits">Data Bits:</system:String>
+    <system:String x:Key="StopBits">Stop Bits:</system:String>
+    <system:String x:Key="Parity">Parity:</system:String>
+    <system:String x:Key="Display">Display</system:String>
+    <system:String x:Key="Timestamp">Timestamp</system:String>
+    <system:String x:Key="PauseUpdate">Pause Update</system:String>
+    <system:String x:Key="AutoScroll">Auto Scroll</system:String>
+    <system:String x:Key="AutoFrameBreak">Auto Frame Break</system:String>
+    <system:String x:Key="Timeout">Timeout:</system:String>
+    <system:String x:Key="OpenPlotter">Open Plotter</system:String>
+    <system:String x:Key="ReceivedData">Received Data</system:String>
+    <system:String x:Key="Clear">Clear</system:String>
+    <system:String x:Key="SendData">Send Data</system:String>
+    <system:String x:Key="History">History</system:String>
+    <system:String x:Key="Send">SEND</system:String>
+    <system:String x:Key="SystemLogs">System Logs</system:String>
+    <system:String x:Key="ClearLogs">Clear Logs</system:String>
+    <system:String x:Key="QuickSends">Quick Sends</system:String>
+    <system:String x:Key="Add">Add</system:String>
+    <system:String x:Key="JSScripts">JS Scripts</system:String>
+    <system:String x:Key="AddScript">Add Script</system:String>
+    <system:String x:Key="ResetCounters">Reset Counters</system:String>
+    
+    <system:String x:Key="Settings">Settings</system:String>
+    <system:String x:Key="Language">Language</system:String>
+    <system:String x:Key="Theme">Theme</system:String>
+    <system:String x:Key="ThemeColor">Color</system:String>
+    <system:String x:Key="Encoding">Encoding</system:String>
+    <system:String x:Key="RxBufferSize">Rx Buffer</system:String>
+    <system:String x:Key="FontSize">Font Size</system:String>
+    <system:String x:Key="LineEnding">Line Ending</system:String>
+    <system:String x:Key="ShowLineNum">Show Line No.</system:String>
+</ResourceDictionary>

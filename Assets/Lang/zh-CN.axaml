@@ -37,4 +37,33 @@
     <system:String x:Key="FontSize">字体大小</system:String>
     <system:String x:Key="LineEnding">换行符</system:String>
     <system:String x:Key="ShowLineNum">显示行号</system:String>
+    <system:String x:Key="Help">帮助</system:String>
+
+    <!-- Help Window -->
+    <system:String x:Key="HelpSerialConnection">串口连接</system:String>
+    <system:String x:Key="HelpSerialConnectionContent">选择正确的串口端口和波特率，点击"连接"按钮建立通信。连接成功后，状态栏会显示已连接。</system:String>
+    <system:String x:Key="HelpDataDisplay">数据接收</system:String>
+    <system:String x:Key="HelpDataDisplayContent">接收区域显示串口接收到的数据。可选择HEX模式以十六进制显示。启用"自动断帧"可自动分割连续数据流，"超时时间"决定分隔间隔。</system:String>
+    <system:String x:Key="HelpPlotter">绘图功能</system:String>
+    <system:String x:Key="HelpPlotterContent">点击"打开绘图窗口"可实时显示数据曲线。配合JS脚本可以解析数据并绘制多条曲线，每条曲线最多显示1000个数据点。</system:String>
+    <system:String x:Key="HelpJSScript">JS 脚本</system:String>
+    <system:String x:Key="HelpJSScriptContent">JS脚本可处理串口数据，支持process(data)函数处理每帧数据，支持onTimer()定时执行。脚本中可以访问chart对象操作绘图。</system:String>
+    <system:String x:Key="HelpJSScriptAPI">可用API:</system:String>
+    <system:String x:Key="HelpExample">使用示例:</system:String>
+    <system:String x:Key="HelpExampleScript">function process(data) {
+  // 解析 "temp:25.5" 格式
+  var parts = data.split(':');
+  if (parts.length === 2) {
+    var name = parts[0].trim();
+    var value = parseFloat(parts[1].trim());
+    if (!isNaN(value)) {
+      chart.addSeries(name, '#FF0000');
+      chart.addPoint(name, value);
+    }
+  }
+  return data;
+}</system:String>
+    <system:String x:Key="HelpQuickSend">快捷发送</system:String>
+    <system:String x:Key="HelpQuickSendContent">快捷发送用于保存常用命令。点击"+"添加新命令，可设置名称和发送内容。支持HEX模式发送。</system:String>
+    <system:String x:Key="HelpFooter">串口调试助手 v1.0</system:String>
 </ResourceDictionary>

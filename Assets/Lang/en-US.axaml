@@ -37,4 +37,33 @@
     <system:String x:Key="FontSize">Font Size</system:String>
     <system:String x:Key="LineEnding">Line Ending</system:String>
     <system:String x:Key="ShowLineNum">Show Line No.</system:String>
+    <system:String x:Key="Help">Help</system:String>
+
+    <!-- Help Window -->
+    <system:String x:Key="HelpSerialConnection">Serial Connection</system:String>
+    <system:String x:Key="HelpSerialConnectionContent">Select the correct serial port and baud rate, then click "Connect" to establish communication. The status bar will show "Connected" when successful.</system:String>
+    <system:String x:Key="HelpDataDisplay">Data Display</system:String>
+    <system:String x:Key="HelpDataDisplayContent">The receive area displays data from the serial port. Enable HEX mode to display in hexadecimal. "Auto Frame Break" automatically splits continuous data streams.</system:String>
+    <system:String x:Key="HelpPlotter">Plotter</system:String>
+    <system:String x:Key="HelpPlotterContent">Click "Open Plotter" to display real-time data curves. Use JS scripts to parse data and draw multiple series, with up to 1000 points per series.</system:String>
+    <system:String x:Key="HelpJSScript">JS Scripts</system:String>
+    <system:String x:Key="HelpJSScriptContent">JS scripts can process serial data. The process(data) function handles each frame, and onTimer() runs periodically. Use the chart object to control plotting.</system:String>
+    <system:String x:Key="HelpJSScriptAPI">Available API:</system:String>
+    <system:String x:Key="HelpExample">Example:</system:String>
+    <system:String x:Key="HelpExampleScript">function process(data) {
+  // Parse "temp:25.5" format
+  var parts = data.split(':');
+  if (parts.length === 2) {
+    var name = parts[0].trim();
+    var value = parseFloat(parts[1].trim());
+    if (!isNaN(value)) {
+      chart.addSeries(name, '#FF0000');
+      chart.addPoint(name, value);
+    }
+  }
+  return data;
+}</system:String>
+    <system:String x:Key="HelpQuickSend">Quick Sends</system:String>
+    <system:String x:Key="HelpQuickSendContent">Quick sends store frequently used commands. Click "+" to add a new command. Supports HEX mode for sending.</system:String>
+    <system:String x:Key="HelpFooter">Serial Port Assistant v1.0</system:String>
 </ResourceDictionary>

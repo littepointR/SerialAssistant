@@ -14,7 +14,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        
+
         _rxTextBox = this.FindControl<TextBox>("RxTextBox");
         _txTextBox = this.FindControl<TextBox>("TxTextBox");
 
@@ -49,11 +49,11 @@ public partial class MainWindow : Window
 
         if (sender == _rxTextBox && _rxTextBox != null)
         {
-            vm.RxSelectionLength = CalculateActualLength(_rxTextBox.SelectedText, vm.IsHexReceive);
+            vm.UpdateRxSelectionStats(_rxTextBox.SelectedText, CalculateActualLength(_rxTextBox.SelectedText, vm.IsHexReceive));
         }
         else if (sender == _txTextBox && _txTextBox != null)
         {
-            vm.TxSelectionLength = CalculateActualLength(_txTextBox.SelectedText, vm.IsHexSend);
+            vm.UpdateTxSelectionStats(_txTextBox.SelectedText, CalculateActualLength(_txTextBox.SelectedText, vm.IsHexSend));
         }
     }
 

@@ -1,0 +1,123 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:material="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="700"
+        x:Class="SerialAssistant.Views.HelpWindow"
+        Title="{DynamicResource Help}"
+        Width="650" Height="750"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Header -->
+        <material:ColorZone Grid.Row="0" Mode="PrimaryMid" Padding="16,12">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Background="{DynamicResource SystemControlBackgroundAltMediumHighBrush}" CornerRadius="8" Padding="8">
+                    <avalonia:MaterialIcon Kind="HelpCircleOutline" Width="22" Height="22" />
+                </Border>
+                <TextBlock Text="{DynamicResource Help}" FontSize="19" FontWeight="SemiBold" VerticalAlignment="Center" LetterSpacing="0.5"/>
+            </StackPanel>
+        </material:ColorZone>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="16">
+            <StackPanel Spacing="14">
+
+                <!-- Serial Connection Section -->
+                <material:Card Padding="14">
+                    <StackPanel Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Border Background="#E0F2F1" CornerRadius="8" Padding="8">
+                                <avalonia:MaterialIcon Kind="CableData" Width="20" Height="20" Foreground="#00897B"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource HelpSerialConnection}" FontWeight="SemiBold" FontSize="16" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock TextWrapping="Wrap" Text="{DynamicResource HelpSerialConnectionContent}" FontSize="13" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" LineHeight="22"/>
+                    </StackPanel>
+                </material:Card>
+
+                <!-- Data Display Section -->
+                <material:Card Padding="14">
+                    <StackPanel Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Border Background="#E8EAF6" CornerRadius="8" Padding="8">
+                                <avalonia:MaterialIcon Kind="Monitor" Width="20" Height="20" Foreground="#3F51B5"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource HelpDataDisplay}" FontWeight="SemiBold" FontSize="16" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock TextWrapping="Wrap" Text="{DynamicResource HelpDataDisplayContent}" FontSize="13" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" LineHeight="22"/>
+                    </StackPanel>
+                </material:Card>
+
+                <!-- Plotter Section -->
+                <material:Card Padding="14">
+                    <StackPanel Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Border Background="#FBE9E7" CornerRadius="8" Padding="8">
+                                <avalonia:MaterialIcon Kind="ChartLine" Width="20" Height="20" Foreground="#FF7043"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource HelpPlotter}" FontWeight="SemiBold" FontSize="16" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock TextWrapping="Wrap" Text="{DynamicResource HelpPlotterContent}" FontSize="13" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" LineHeight="22"/>
+                    </StackPanel>
+                </material:Card>
+
+                <!-- JS Script Section -->
+                <material:Card Padding="14">
+                    <StackPanel Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Border Background="#F3E5F5" CornerRadius="8" Padding="8">
+                                <avalonia:MaterialIcon Kind="CodeBraces" Width="20" Height="20" Foreground="#8E24AA"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource HelpJSScript}" FontWeight="SemiBold" FontSize="16" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock TextWrapping="Wrap" Text="{DynamicResource HelpJSScriptContent}" FontSize="13" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" LineHeight="22"/>
+
+                        <!-- API Table -->
+                        <Border BorderBrush="{DynamicResource SystemControlForegroundBaseMediumHighBrush}" BorderThickness="1" CornerRadius="8" Margin="0,10,0,0" Padding="12" Background="{DynamicResource SystemControlBackgroundAltMediumHighBrush}">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{DynamicResource HelpJSScriptAPI}" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                <TextBlock Text="chart.addSeries(name, color)" FontFamily="Consolas" FontSize="12" Foreground="#D32F2F" Margin="0,4,0,0"/>
+                                <TextBlock Text="chart.removeSeries(name)" FontFamily="Consolas" FontSize="12" Foreground="#D32F2F"/>
+                                <TextBlock Text="chart.addPoint(name, value)" FontFamily="Consolas" FontSize="12" Foreground="#D32F2F"/>
+                                <TextBlock Text="chart.getPoints(name)" FontFamily="Consolas" FontSize="12" Foreground="#D32F2F"/>
+                                <TextBlock Text="chart.clear(name)" FontFamily="Consolas" FontSize="12" Foreground="#D32F2F"/>
+                                <TextBlock Text="chart.clearAll()" FontFamily="Consolas" FontSize="12" Foreground="#D32F2F"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Example -->
+                        <Border BorderBrush="#42A5F5" BorderThickness="1" CornerRadius="8" Margin="0,10,0,0" Padding="12" Background="#E3F2FD">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{DynamicResource HelpExample}" FontWeight="SemiBold" FontSize="13" Foreground="#1565C0"/>
+                                <TextBlock Text="{DynamicResource HelpExampleScript}" FontFamily="Consolas" FontSize="11" TextWrapping="Wrap" Foreground="#37474F" LineHeight="18"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </material:Card>
+
+                <!-- Quick Send Section -->
+                <material:Card Padding="14">
+                    <StackPanel Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Border Background="#FFF3E0" CornerRadius="8" Padding="8">
+                                <avalonia:MaterialIcon Kind="Send" Width="20" Height="20" Foreground="#FB8C00"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource HelpQuickSend}" FontWeight="SemiBold" FontSize="16" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock TextWrapping="Wrap" Text="{DynamicResource HelpQuickSendContent}" FontSize="13" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" LineHeight="22"/>
+                    </StackPanel>
+                </material:Card>
+
+                <!-- Footer -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,12,0,0">
+                    <avalonia:MaterialIcon Kind="InformationOutline" Width="14" Height="14" Foreground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"/>
+                    <TextBlock Text="{DynamicResource HelpFooter}" Foreground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}" FontSize="11"/>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

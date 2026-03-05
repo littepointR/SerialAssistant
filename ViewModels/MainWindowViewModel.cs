@@ -23,6 +23,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly List<byte> _rxBuffer = new();
     private PlotWindow? _plotWindow;
     private PlotWindowViewModel? _plotViewModel;
+    private HelpWindow? _helpWindow;
     private int _lineCounter = 1;
 
     [ObservableProperty]
@@ -105,6 +106,18 @@ public partial class MainWindowViewModel : ViewModelBase
     private int _txSelectionLength = 0;
 
     [ObservableProperty]
+    private int _rxSelectionCharCount = 0;
+
+    [ObservableProperty]
+    private int _rxSelectionHexCount = 0;
+
+    [ObservableProperty]
+    private int _txSelectionCharCount = 0;
+
+    [ObservableProperty]
+    private int _txSelectionHexCount = 0;
+
+    [ObservableProperty]
     private ObservableCollection<string> _sendHistory = new();
 
     [ObservableProperty]
@@ -153,11 +166,12 @@ public partial class MainWindowViewModel : ViewModelBase
             QuickSends.Add(new QuickSendItem(OnQuickSend, OnRemoveQuickSend) { Name = $"Cmd {i}" });
         }
 
-        JsScripts.Add(new JsScriptItem 
-        { 
+        JsScripts.Add(new JsScriptItem
+        {
             Name = "Default Script",
             SendDataAction = (data) => Dispatcher.UIThread.Post(() => SendData(data, false)),
-            LogAction = (msg) => Dispatcher.UIThread.Post(() => AppendLogData(msg))
+            LogAction = (msg) => Dispatcher.UIThread.Post(() => AppendLogData(msg)),
+            PlotViewModel = _plotViewModel
         });
     }
 
@@ -235,11 +249,12 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void AddScript()
     {
-        JsScripts.Add(new JsScriptItem 
-        { 
+        JsScripts.Add(new JsScriptItem
+        {
             Name = $"New Script {JsScripts.Count + 1}",
             SendDataAction = (data) => Dispatcher.UIThread.Post(() => SendData(data, false)),
-            LogAction = (msg) => Dispatcher.UIThread.Post(() => AppendLogData(msg))
+            LogAction = (msg) => Dispatcher.UIThread.Post(() => AppendLogData(msg)),
+            PlotViewModel = _plotViewModel
         });
     }
 
@@ -536,6 +551,13 @@ public partial class MainWindowViewModel : ViewModelBase
         if (_plotWindow == null || !_plotWindow.IsVisible)
         {
             _plotViewModel = new PlotWindowViewModel();
+
+            // Pass plot view model to all scripts
+            foreach (var script in JsScripts)
+            {
+                script.PlotViewModel = _plotViewModel;
+            }
+
             _plotWindow = new PlotWindow
             {
                 DataContext = _plotViewModel
@@ -546,6 +568,55 @@ public partial class MainWindowViewModel : ViewModelBase
         else
         {
             _plotWindow.Activate();
+        }
+    }
+
+    [RelayCommand]
+    private void OpenHelp()
+    {
+        if (_helpWindow == null || !_helpWindow.IsVisible)
+        {
+            _helpWindow = new HelpWindow();
+            _helpWindow.Closed += (s, e) => { _helpWindow = null; };
+            _helpWindow.Show();
+        }
+        else
+        {
+            _helpWindow.Activate();
+        }
+    }
+
+    public void UpdateRxSelectionStats(string? selectedText, int selectionLength)
+    {
+        RxSelectionLength = selectionLength;
+        if (string.IsNullOrEmpty(selectedText))
+        {
+            RxSelectionCharCount = 0;
+            RxSelectionHexCount = 0;
+        }
+        else
+        {
+            RxSelectionCharCount = selectedText.Length;
+            // Calculate hex count: each char in hex string represents 4 bits
+            // When in HEX mode, count the hex characters and divide by 2 (2 chars = 1 byte)
+            var hexChars = selectedText.Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace("-", "");
+            RxSelectionHexCount = hexChars.Length / 2;
+        }
+    }
+
+    public void UpdateTxSelectionStats(string? selectedText, int selectionLength)
+    {
+        TxSelectionLength = selectionLength;
+        if (string.IsNullOrEmpty(selectedText))
+        {
+            TxSelectionCharCount = 0;
+            TxSelectionHexCount = 0;
+        }
+        else
+        {
+            TxSelectionCharCount = selectedText.Length;
+            var hexChars = selectedText.Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace("-", "");
+            TxSelectionHexCount = hexChars.Length / 2;
         }
     }
 
